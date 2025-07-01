@@ -29,6 +29,27 @@ const Index = () => {
     }
   }, [location.state]);
 
+  // Handle shared route from URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sharedRoute = urlParams.get('shared');
+    
+    if (sharedRoute) {
+      try {
+        const route = JSON.parse(decodeURIComponent(sharedRoute));
+        setCurrentRoute(route);
+        // URL에서 shared 파라미터 제거
+        window.history.replaceState({}, document.title, window.location.pathname);
+        toast({
+          title: "공유된 루트를 불러왔습니다",
+          description: `"${route.title}" 루트를 확인해보세요!`,
+        });
+      } catch (error) {
+        console.error('Failed to parse shared route:', error);
+      }
+    }
+  }, [toast]);
+
   const handleUrlSubmit = async (url: string) => {
     setLoading(true);
     
@@ -78,18 +99,7 @@ const Index = () => {
   };
 
   const handleAddPlace = () => {
-    const newPlace: Place = {
-      id: `place-${Date.now()}`,
-      name: '새로운 장소',
-      address: '주소를 입력하세요',
-      latitude: 37.5665 + (Math.random() - 0.5) * 0.1,
-      longitude: 126.9780 + (Math.random() - 0.5) * 0.1,
-      category: '기타'
-    };
-    
-    if (currentRoute) {
-      handlePlaceEdit([...currentRoute.places, newPlace]);
-    }
+    console.log('handleAddPlace called - this should be handled by AddPlaceDialog');
   };
 
   const handleDeletePlace = (placeId: string) => {
@@ -127,25 +137,6 @@ const Index = () => {
     setCurrentRoute(route);
     setShowSavedRoutes(false);
   };
-
-  // Handle shared route from URL
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const sharedRoute = urlParams.get('route');
-    
-    if (sharedRoute) {
-      try {
-        const route = JSON.parse(decodeURIComponent(sharedRoute));
-        setCurrentRoute(route);
-        toast({
-          title: "공유된 루트를 불러왔습니다",
-          description: `"${route.title}" 루트를 확인해보세요!`,
-        });
-      } catch (error) {
-        console.error('Failed to parse shared route:', error);
-      }
-    }
-  }, [toast]);
 
   return (
     <div className="min-h-screen bg-toss-gray-100">

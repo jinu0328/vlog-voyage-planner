@@ -5,60 +5,122 @@ import Header from '@/components/Header';
 import { Card } from '@/components/ui/card';
 import { MapPin, Heart, Share, User } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { TravelRoute } from '@/types';
 
 const Explore = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [savedRoutes] = useLocalStorage<TravelRoute[]>('travel-routes', []);
 
-  // Mock popular routes data
-  const popularRoutes = [
+  // 저장된 루트와 샘플 루트를 합쳐서 표시
+  const sampleRoutes = [
     {
-      id: '1',
+      id: 'sample-1',
       title: '제주도 힐링 여행',
       author: '여행러버',
       likes: 124,
       places: 8,
-      thumbnail: 'https://via.placeholder.com/300x200?text=제주도',
-      videoUrl: 'https://youtube.com/watch?v=sample1'
+      thumbnail: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop',
+      videoUrl: 'https://youtube.com/watch?v=sample1',
+      createdAt: '2024-01-15',
+      isPublic: true,
+      actualPlaces: [
+        {
+          id: 'jeju-1',
+          name: '성산일출봉',
+          address: '제주특별자치도 서귀포시 성산읍 성산리',
+          latitude: 33.4587,
+          longitude: 126.9423,
+          category: '관광명소'
+        },
+        {
+          id: 'jeju-2',
+          name: '우도',
+          address: '제주특별자치도 제주시 우도면 연평리',
+          latitude: 33.5004,
+          longitude: 126.9508,
+          category: '관광명소'
+        }
+      ]
     },
     {
-      id: '2',
+      id: 'sample-2',
       title: '부산 바다 여행',
       author: '바다사랑',
       likes: 89,
       places: 6,
-      thumbnail: 'https://via.placeholder.com/300x200?text=부산',
-      videoUrl: 'https://youtube.com/watch?v=sample2'
-    },
-    {
-      id: '3',
-      title: '서울 도심 투어',
-      author: '도시탐험가',
-      likes: 156,
-      places: 12,
-      thumbnail: 'https://via.placeholder.com/300x200?text=서울',
-      videoUrl: 'https://youtube.com/watch?v=sample3'
+      thumbnail: 'https://images.unsplash.com/photo-1578463071275-0d9b3c10d6ba?w=300&h=200&fit=crop',
+      videoUrl: 'https://youtube.com/watch?v=sample2',
+      createdAt: '2024-01-10',
+      isPublic: true,
+      actualPlaces: [
+        {
+          id: 'busan-1',
+          name: '해운대해수욕장',
+          address: '부산광역시 해운대구 우동',
+          latitude: 35.1587,
+          longitude: 129.1603,
+          category: '해수욕장'
+        },
+        {
+          id: 'busan-2',
+          name: '광안리해수욕장',
+          address: '부산광역시 수영구 광안동',
+          latitude: 35.1532,
+          longitude: 129.1186,
+          category: '해수욕장'
+        }
+      ]
     }
   ];
 
+  // 저장된 루트를 탐색 페이지 형식으로 변환
+  const savedRoutesForExplore = savedRoutes.map(route => ({
+    id: route.id,
+    title: route.title,
+    author: '나',
+    likes: route.likes,
+    places: route.places.length,
+    thumbnail: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=300&h=200&fit=crop',
+    videoUrl: route.videoUrl,
+    createdAt: route.createdAt,
+    isPublic: route.isPublic,
+    actualPlaces: route.places
+  }));
+
+  const allRoutes = [...sampleRoutes, ...savedRoutesForExplore];
+
   const handleViewRoute = (route: any) => {
-    // 홈 페이지로 이동하면서 해당 루트 데이터 전달
+    const routeData = {
+      id: route.id,
+      title: route.title,
+      videoUrl: route.videoUrl,
+      places: route.actualPlaces || [],
+      createdAt: route.createdAt,
+      likes: route.likes,
+      isPublic: route.isPublic || false
+    };
+
     navigate('/', { 
       state: { 
-        loadedRoute: {
-          id: route.id,
-          title: route.title,
-          videoUrl: route.videoUrl,
-          places: [], // Mock data for places would go here
-          createdAt: new Date().toLocaleDateString(),
-          likes: route.likes
-        }
+        loadedRoute: routeData
       }
     });
   };
 
   const handleShareRoute = (route: any) => {
-    const shareUrl = `${window.location.origin}/?route=${route.id}`;
+    const routeData = {
+      id: route.id,
+      title: route.title,
+      videoUrl: route.videoUrl,
+      places: route.actualPlaces || [],
+      createdAt: route.createdAt,
+      likes: route.likes,
+      isPublic: route.isPublic || false
+    };
+    
+    const shareUrl = `${window.location.origin}/?shared=${encodeURIComponent(JSON.stringify(routeData))}`;
     navigator.clipboard.writeText(shareUrl);
     
     toast({
@@ -78,7 +140,7 @@ const Explore = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {popularRoutes.map((route) => (
+          {allRoutes.map((route) => (
             <Card key={route.id} className="toss-card overflow-hidden hover:shadow-lg transition-shadow">
               <img
                 src={route.thumbnail}
@@ -122,6 +184,14 @@ const Explore = () => {
             </Card>
           ))}
         </div>
+
+        {allRoutes.length === 0 && (
+          <div className="text-center py-12 text-toss-gray-500">
+            <MapPin className="w-16 h-16 mx-auto mb-4 opacity-50" />
+            <p className="text-lg mb-2">표시할 루트가 없습니다</p>
+            <p>새로운 여행 루트를 만들어보세요!</p>
+          </div>
+        )}
       </main>
     </div>
   );
