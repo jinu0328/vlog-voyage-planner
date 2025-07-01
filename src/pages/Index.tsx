@@ -1,5 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
 import UrlInput from '@/components/UrlInput';
 import PlacesList from '@/components/PlacesList';
@@ -12,11 +12,22 @@ import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
+  const location = useLocation();
   const [currentRoute, setCurrentRoute] = useState<TravelRoute | null>(null);
   const [loading, setLoading] = useState(false);
   const [savedRoutes, setSavedRoutes] = useLocalStorage<TravelRoute[]>('travel-routes', []);
   const [showSavedRoutes, setShowSavedRoutes] = useState(false);
   const { toast } = useToast();
+
+  // Handle loaded route from navigation state
+  useEffect(() => {
+    if (location.state?.loadedRoute) {
+      setCurrentRoute(location.state.loadedRoute);
+      setShowSavedRoutes(false);
+      // Clear the state to prevent re-loading on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const handleUrlSubmit = async (url: string) => {
     setLoading(true);

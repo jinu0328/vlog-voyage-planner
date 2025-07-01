@@ -47,6 +47,20 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Toss Design System Colors */
+    --toss-blue: 217 91% 50%;
+    --toss-navy: 221 83% 13%;
+    --toss-gray-50: 210 40% 98%;
+    --toss-gray-100: 210 40% 96%;
+    --toss-gray-200: 214 32% 91%;
+    --toss-gray-300: 213 27% 84%;
+    --toss-gray-400: 215 20% 65%;
+    --toss-gray-500: 215 16% 47%;
+    --toss-gray-600: 215 19% 35%;
+    --toss-gray-700: 215 25% 27%;
+    --toss-gray-800: 217 33% 17%;
+    --toss-gray-900: 222 84% 5%;
   }
 
   .dark {
@@ -112,4 +126,45 @@ All colors MUST be HSL.
   .toss-card {
     @apply bg-white rounded-2xl border border-toss-gray-200 shadow-sm;
   }
+}
+
+/* Toss Design System utility classes */
+@layer utilities {
+  .text-toss-blue { color: hsl(var(--toss-blue)); }
+  .text-toss-navy { color: hsl(var(--toss-navy)); }
+  .text-toss-gray-50 { color: hsl(var(--toss-gray-50)); }
+  .text-toss-gray-100 { color: hsl(var(--toss-gray-100)); }
+  .text-toss-gray-200 { color: hsl(var(--toss-gray-200)); }
+  .text-toss-gray-300 { color: hsl(var(--toss-gray-300)); }
+  .text-toss-gray-400 { color: hsl(var(--toss-gray-400)); }
+  .text-toss-gray-500 { color: hsl(var(--toss-gray-500)); }
+  .text-toss-gray-600 { color: hsl(var(--toss-gray-600)); }
+  .text-toss-gray-700 { color: hsl(var(--toss-gray-700)); }
+  .text-toss-gray-800 { color: hsl(var(--toss-gray-800)); }
+  .text-toss-gray-900 { color: hsl(var(--toss-gray-900)); }
+
+  .bg-toss-blue { background-color: hsl(var(--toss-blue)); }
+  .bg-toss-navy { background-color: hsl(var(--toss-navy)); }
+  .bg-toss-gray-50 { background-color: hsl(var(--toss-gray-50)); }
+  .bg-toss-gray-100 { background-color: hsl(var(--toss-gray-100)); }
+  .bg-toss-gray-200 { background-color: hsl(var(--toss-gray-200)); }
+  .bg-toss-gray-300 { background-color: hsl(var(--toss-gray-300)); }
+  .bg-toss-gray-400 { background-color: hsl(var(--toss-gray-400)); }
+  .bg-toss-gray-500 { background-color: hsl(var(--toss-gray-500)); }
+  .bg-toss-gray-600 { background-color: hsl(var(--toss-gray-600)); }
+  .bg-toss-gray-700 { background-color: hsl(var(--toss-gray-700)); }
+  .bg-toss-gray-800 { background-color: hsl(var(--toss-gray-800)); }
+  .bg-toss-gray-900 { background-color: hsl(var(--toss-gray-900)); }
+
+  .border-toss-blue { border-color: hsl(var(--toss-blue)); }
+  .border-toss-navy { border-color: hsl(var(--toss-navy)); }
+  .border-toss-gray-200 { border-color: hsl(var(--toss-gray-200)); }
+  .border-toss-gray-300 { border-color: hsl(var(--toss-gray-300)); }
+  .border-toss-gray-400 { border-color: hsl(var(--toss-gray-400)); }
+  .border-toss-gray-500 { border-color: hsl(var(--toss-gray-500)); }
+
+  .hover\:bg-toss-blue\/90:hover { background-color: hsl(var(--toss-blue) / 0.9); }
+  .hover\:bg-toss-blue\/80:hover { background-color: hsl(var(--toss-blue) / 0.8); }
+  .hover\:text-toss-blue\/80:hover { color: hsl(var(--toss-blue) / 0.8); }
+  .hover\:bg-toss-gray-50:hover { background-color: hsl(var(--toss-gray-50)); }
 }
