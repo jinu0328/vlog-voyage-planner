@@ -1,73 +1,117 @@
-# Welcome to your Lovable project
+# 🎥✈️ vlog-voyage-planner
 
-## Project info
+> 유튜브 여행 브이로그에서 자동으로 여행지를 추출하고, 나만의 국내 여행 루트를 만들고 공유할 수 있는 간단한 지도 기반 도우미
+> 
 
-**URL**: https://lovable.dev/projects/635d6ef9-8de7-49d8-8b30-110656291ec0
+🔗 [서비스 바로가기](https://vlog-voyage-planner.lovable.app/)
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 📌 서비스 개요
 
-**Use Lovable**
+**vlog-voyage-planner**는 유튜브에 올라온 국내 여행 브이로그의 URL을 입력하면,
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/635d6ef9-8de7-49d8-8b30-110656291ec0) and start prompting.
+자동으로 등장 장소를 추출하고 지도에 시각화하여 보여주는 서비스입니다.
 
-Changes made via Lovable will be committed automatically to this repo.
+사용자는 추출된 장소를 그대로 활용하거나 직접 추가·수정하여 **나만의 여행 루트**를 만들고, 이를 저장하거나 공유할 수 있습니다.
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 💡 주제의 의의
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+여행 준비의 첫걸음은 정보 수집이지만,
 
-Follow these steps:
+많은 사용자들이 **유튜브 브이로그에서 얻은 장소 정보를 수작업으로 정리**하는 데 어려움을 겪고 있습니다.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- 영상 속 장소를 다시 보며 노트에 적거나,
+- 지도 앱을 열어 위치를 하나하나 저장하는 등
+번거로운 과정을 거쳐야 합니다.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+**vlog-voyage-planner**는 이 과정을 자동화하고,
 
-# Step 3: Install the necessary dependencies.
-npm i
+**더 나아가 커스터마이징 및 공유 기능까지** 제공하여,
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+**여행자 개인의 경험을 콘텐츠로 확장할 수 있는 기반**을 마련합니다.
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 👤 사용자 페르소나
 
-**Use GitHub Codespaces**
+| 이름 | 유형 | 나이 | 직업 | 목표 | 니즈 |
+| --- | --- | --- | --- | --- | --- |
+| 김다혜 | 기록형 사용자 | 29세 | 회사원 | 유튜브 영상 속 장소를 간편히 정리하고 저장하고 싶다 | 자동 추출 + 지도 시각화 + 저장 기능 |
+| 이태성 | 수정형 사용자 | 31세 | 프리랜서 | 영상 속 장소 외에 내가 다녀온 곳도 추가하고 싶다 | 장소 추가/삭제/정렬 기능 |
+| 박수빈 | 공유형 사용자 | 24세 | 여행 블로거 | 내가 만든 여행 루트를 다른 사람들과 나누고 싶다 | 공유 링크 생성, 좋아요, 복사 기능 |
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## **사용자 시나리오 & 요구사항**
 
-This project is built with:
+| **페르소나** | **시나리오 (사용 흐름)** | **요구사항** |
+| --- | --- | --- |
+| **기록형 사용자 (김다혜)** | 영상 시청 후 URL 복사 → 웹사이트에 붙여넣기 → 자동 장소 추출 → 지도에서 확인 → 저장 | 1. 유튜브 URL 입력 기능<br>2. 하드코딩된 장소 키워드 매핑<br>3. 지도 연동 및 마커 표시<br>4. 여행 루트 저장 |
+| **수정형 사용자 (이태성)** | 자동 추출 후 → 장소 추가/삭제 → 순서 조정 → 커스텀 루트 저장 → 다음에 불러오기 | 1. 장소 편집 UI (입력, 삭제)<br>2. Drag & Drop 정렬<br>3. LocalStorage 기반 저장/불러오기 |
+| **공유형 사용자 (박수빈)** | 내 루트 저장 후 → 공유 버튼 클릭 → 링크 생성 → 타인이 접속 시 동일 루트 표시 | 1. URL 파라미터 기반 공유 링크 생성<br>2. 공유 루트 복사 및 수정 기능<br>3. 간단한 소셜 요소(좋아요/조회수) |
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 🧩 핵심 기능
 
-## How can I deploy this project?
+- ✅ 유튜브 브이로그 URL 입력
+- ✅ 해당 영상에서 등장한 **국내 장소 키워드 자동 추출**
+- ✅ 각 장소를 지도에 마커로 시각화
+- ✅ 장소 편집 기능 (추가, 삭제, 순서 변경)
+- ✅ 사용자 로컬에 여행 루트 저장
+- ✅ URL 기반 루트 공유 및 복사 기능
 
-Simply open [Lovable](https://lovable.dev/projects/635d6ef9-8de7-49d8-8b30-110656291ec0) and click on Share -> Publish.
+---
 
-## Can I connect a custom domain to my Lovable project?
+## ✅ 인수 조건
 
-Yes, you can!
+### 1. URL 입력 시 장소 키워드 추출
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- **Given**: 사용자가 vlog-voyage-planner에 접속해 유튜브 영상 URL을 입력한다
+- **When**: [장소 추출] 버튼을 클릭한다
+- **Then**: 해당 URL에 매핑된 장소 키워드 리스트가 화면에 표시된다 (예: "협재 해수욕장", "성산일출봉")
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+---
+
+### 2. 추출된 장소 지도에 시각화
+
+- **Given**: 키워드 리스트가 표시되어 있는 상태이다
+- **When**: 각 장소를 지도에 렌더링한다
+- **Then**: 지도에 마커가 표시되며, 마커 클릭 시 장소명이 보여진다
+
+---
+
+### 3. 사용자 장소 편집 기능
+
+- **Given**: 장소 리스트가 화면에 출력되어 있다
+- **When**: 사용자가 항목을 삭제하거나, 새로운 장소명을 입력해 추가한다
+- **Then**: 리스트 및 지도 마커가 실시간으로 반영되어 업데이트된다
+
+---
+
+### 4. 여행 루트 저장
+
+- **Given**: 사용자가 장소 리스트를 편집 완료했다
+- **When**: [루트 저장] 버튼을 누르면
+- **Then**: 해당 루트가 로컬 스토리지에 저장되고, 다음 접속 시 불러올 수 있다
+
+---
+
+### 5. 루트 공유 기능
+
+- **Given**: 사용자가 루트를 저장한 상태이다
+- **When**: [공유하기] 버튼을 클릭하면
+- **Then**: URL 파라미터에 장소 목록이 포함된 공유 가능한 링크가 생성된다
+- **And**: 다른 사용자가 해당 링크에 접속하면 동일한 루트가 표시된다
+
+---
+
+## 🔗 프로젝트 링크
+
+- 🎯 **서비스 URL**: https://vlog-voyage-planner.lovable.app/
+- 🛠️ 구현: HTML + CSS + JavaScript (+ Kakao Map API)
+- 📍 주요 기능: 자동 키워드 추출, 지도 표시, 장소 편집, 저장/공유
+
+---
