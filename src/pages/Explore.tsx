@@ -1,10 +1,15 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import { Card } from '@/components/ui/card';
 import { MapPin, Heart, Share, User } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const Explore = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
   // Mock popular routes data
   const popularRoutes = [
     {
@@ -13,7 +18,8 @@ const Explore = () => {
       author: '여행러버',
       likes: 124,
       places: 8,
-      thumbnail: 'https://via.placeholder.com/300x200?text=제주도'
+      thumbnail: 'https://via.placeholder.com/300x200?text=제주도',
+      videoUrl: 'https://youtube.com/watch?v=sample1'
     },
     {
       id: '2',
@@ -21,7 +27,8 @@ const Explore = () => {
       author: '바다사랑',
       likes: 89,
       places: 6,
-      thumbnail: 'https://via.placeholder.com/300x200?text=부산'
+      thumbnail: 'https://via.placeholder.com/300x200?text=부산',
+      videoUrl: 'https://youtube.com/watch?v=sample2'
     },
     {
       id: '3',
@@ -29,9 +36,36 @@ const Explore = () => {
       author: '도시탐험가',
       likes: 156,
       places: 12,
-      thumbnail: 'https://via.placeholder.com/300x200?text=서울'
+      thumbnail: 'https://via.placeholder.com/300x200?text=서울',
+      videoUrl: 'https://youtube.com/watch?v=sample3'
     }
   ];
+
+  const handleViewRoute = (route: any) => {
+    // 홈 페이지로 이동하면서 해당 루트 데이터 전달
+    navigate('/', { 
+      state: { 
+        loadedRoute: {
+          id: route.id,
+          title: route.title,
+          videoUrl: route.videoUrl,
+          places: [], // Mock data for places would go here
+          createdAt: new Date().toLocaleDateString(),
+          likes: route.likes
+        }
+      }
+    });
+  };
+
+  const handleShareRoute = (route: any) => {
+    const shareUrl = `${window.location.origin}/?route=${route.id}`;
+    navigator.clipboard.writeText(shareUrl);
+    
+    toast({
+      title: "공유 링크가 복사되었습니다",
+      description: `"${route.title}" 루트를 다른 사람들과 공유해보세요!`,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-toss-gray-100">
@@ -71,10 +105,16 @@ const Explore = () => {
                 </div>
 
                 <div className="flex gap-2">
-                  <button className="flex-1 py-2 px-4 bg-toss-blue text-white rounded-lg hover:bg-toss-blue/90 transition-colors">
+                  <button 
+                    onClick={() => handleViewRoute(route)}
+                    className="flex-1 py-2 px-4 bg-toss-blue text-white rounded-lg hover:bg-toss-blue/90 transition-colors"
+                  >
                     보기
                   </button>
-                  <button className="p-2 border border-toss-gray-300 rounded-lg hover:bg-toss-gray-50 transition-colors">
+                  <button 
+                    onClick={() => handleShareRoute(route)}
+                    className="p-2 border border-toss-gray-300 rounded-lg hover:bg-toss-gray-50 transition-colors"
+                  >
                     <Share className="w-4 h-4" />
                   </button>
                 </div>
